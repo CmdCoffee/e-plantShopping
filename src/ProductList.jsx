@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import CartSlice from './CartSlice';
+import { addItem } from './CartSlice';
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    const [addedToCart, setAddedToCart] = useState({});
+
 
     const plantsArray = [
         {
@@ -218,7 +222,7 @@ function ProductList({ onHomeClick }) {
         padding: '15px',
         display: 'flex',
         justifyContent: 'space-between',
-        alignIems: 'center',
+        alignItems: 'center',
         fontSize: '20px',
     }
     const styleObjUl = {
@@ -233,10 +237,12 @@ function ProductList({ onHomeClick }) {
         textDecoration: 'none',
     }
 
+
     const handleHomeClick = (e) => {
         e.preventDefault();
         onHomeClick();
     };
+
 
     const handleCartClick = (e) => {
         e.preventDefault();
@@ -248,10 +254,23 @@ function ProductList({ onHomeClick }) {
         setShowCart(false); // Hide the cart when navigating to About Us
     };
 
+
     const handleContinueShopping = (e) => {
-        e.preventDefault();
-        setShowCart(false);
+        dispatch(addItem(product));
+
+
+        setAddedToCart((prevState) => ({
+            ...prevState,
+            [product.name]: true,
+        }));
     };
+
+
+    const handleAddToCart = (e) => {
+        e.preventDefault();
+
+
+    }
     return (
         <div>
             <div className="navbar" style={styleObj}>
@@ -266,6 +285,7 @@ function ProductList({ onHomeClick }) {
                         </a>
                     </div>
 
+
                 </div>
                 <div style={styleObjUl}>
                     <div> <a href="#" onClick={(e) => handlePlantsClick(e)} style={styleA}>Plants</a></div>
@@ -274,8 +294,30 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
-
-
+                    {plantsArray.map((category, index) => (
+                        <div key={index}>
+                            <h1>
+                                <div>{category.category}</div>
+                            </h1>
+                            <div className="product-list">
+                                {category.plants.map((plant, plantIndex) => (
+                                    <div key={plantIndex}>
+                                        <img
+                                            className="product-image"
+                                            src={plant.image}
+                                            alt={plant.name}
+                                        />
+                                        <div className="product-title">{plant.name}</div>
+                                        <div className="product-descriptions">{plant.description}</div>
+                                        <div className="product-cost">{plant.cost}</div>
+                                        <button className='product-button' onClick={() => handleAddToCart(plant)}>
+                                            Add to Cart
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : (
                 <CartItem onContinueShopping={handleContinueShopping} />
@@ -283,5 +325,6 @@ function ProductList({ onHomeClick }) {
         </div>
     );
 }
+
 
 export default ProductList;
