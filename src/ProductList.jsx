@@ -268,9 +268,13 @@ function ProductList({ onHomeClick }) {
 
     const handleAddToCart = (e) => {
         e.preventDefault();
+        dispatch(addItem(product));
 
+    };
 
-    }
+    const calculateTotalQuantity = () => {
+    return CartItems ? CartItems.reduce((total, item) => total + item.quantity, 0) : 0;
+    };
     return (
         <div>
             <div className="navbar" style={styleObj}>
