@@ -1,3 +1,3 @@
 # e-plantShopping
 
-It's a plans ecommerce website.
+It's a plants ecommerce website.
